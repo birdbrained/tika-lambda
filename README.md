@@ -3,6 +3,10 @@ Run Apache Tika as a service in AWS Lambda by scanning documents in S3 and stori
 
 Heavily based on the work in https://github.com/gnethercutt/tika-lambda
 
+## COS Chages
+
+- Set permissions on extracted content to public read
+
 Main changes from the original version:
  - TikaLambdaHandler is no longer abstract. It saves the tika-extracted text back to the S3 bucket with the same key + ".extract"
  - More logging

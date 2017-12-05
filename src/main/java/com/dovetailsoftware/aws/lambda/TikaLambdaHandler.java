@@ -29,6 +29,7 @@ import com.amazonaws.services.lambda.runtime.events.S3Event;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.event.S3EventNotification.S3EventNotificationRecord;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.GetObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
@@ -73,7 +74,9 @@ public class TikaLambdaHandler implements RequestHandler<S3Event, String> {
 
                 _logger.log("Saving extract file to S3");
                 InputStream inputStream = new ByteArrayInputStream(extractBytes);
-                s3Client.putObject(extractBucket, key + ".extract", inputStream, metaData);
+                PutObjectRequest request = new PutObjectRequest(extractBucket, key + ".extract", inputStream, metaData);
+                request.setCannedAcl(CannedAccessControlList.PublicRead);
+                s3Client.putObject(request);
             }
         } catch (IOException | TransformerConfigurationException | SAXException e) {
             _logger.log("Exception: " + e.getLocalizedMessage());
